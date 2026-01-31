@@ -1,16 +1,32 @@
+"use client";
+
 import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 import { Github, Linkedin, Mail } from 'lucide-react';
 
 export default function Footer() {
+    const pathname = usePathname();
+    const router = useRouter();
+
+    const handleFaqClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        if (pathname === '/') {
+            // If on home, just scroll
+            document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
+        } else {
+            // If on another page, navigate with query param
+            router.push('/?section=faq');
+        }
+    };
+
     return (
         <footer className="w-full border-t border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 py-12 px-4 md:px-8">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
                 {/* Brand Column */}
                 <div className="col-span-1 md:col-span-1 space-y-4">
                     <Link href="/" className="flex items-center gap-1 font-bold text-xl tracking-tight">
-                        <span className="text-green-600 dark:text-green-500">Lease</span>
-                        <span className="text-foreground">Lens</span>
-                        <span className="text-blue-600 dark:text-blue-500">AI</span>
+                        <span className="text-blue-600 dark:text-blue-500">LeaseLens</span>
+                        <span className="text-green-600 dark:text-gray-800">AI</span>
                     </Link>
                     <p className="text-muted-foreground text-sm leading-relaxed">
                         AI-powered protection for tenants. We analyze leases, spot red flags, and help you negotiate better terms.
@@ -22,7 +38,11 @@ export default function Footer() {
                     <h3 className="font-semibold mb-4 text-foreground">Product</h3>
                     <ul className="space-y-2 text-sm text-muted-foreground">
                         <li><Link href="/pricing" className="hover:text-primary transition-colors">Pricing</Link></li>
-                        <li><Link href="/#faq" className="hover:text-primary transition-colors">FAQ</Link></li>
+                        <li>
+                            <a href="/#faq" onClick={handleFaqClick} className="hover:text-primary transition-colors cursor-pointer">
+                                FAQ
+                            </a>
+                        </li>
                         <li><Link href="/results" className="hover:text-primary transition-colors">Sample Report</Link></li>
                     </ul>
                 </div>
@@ -30,9 +50,9 @@ export default function Footer() {
                 <div>
                     <h3 className="font-semibold mb-4 text-foreground">Company</h3>
                     <ul className="space-y-2 text-sm text-muted-foreground">
-                        <li><Link href="/about" className="hover:text-primary transition-colors">About Us</Link></li>
-                        <li><Link href="/contact" className="hover:text-primary transition-colors">Contact</Link></li>
-                        <li><Link href="/blog" className="hover:text-primary transition-colors">Blog</Link></li>
+                        <li><Link href="https://www.nimbustechnologies.in/" target="_blank" className="hover:text-primary transition-colors">About Us</Link></li>
+                        <li><Link href="https://www.nimbustechnologies.in/" target="_blank" className="hover:text-primary transition-colors">Contact</Link></li>
+                        <li><Link href="https://www.nimbustechnologies.in/" target="_blank" className="hover:text-primary transition-colors">Blog</Link></li>
                     </ul>
                 </div>
 

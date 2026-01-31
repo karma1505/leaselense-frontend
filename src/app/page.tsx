@@ -1,8 +1,27 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import FAQ from "@/components/FAQ";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useEffect, Suspense } from "react";
 
-export default function Home() {
+function HomeContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    const section = searchParams.get('section');
+    if (section === 'faq') {
+      // Small delay to ensure render
+      setTimeout(() => {
+        document.getElementById('faq')?.scrollIntoView({ behavior: 'smooth' });
+        // Clean URL
+        router.replace('/', { scroll: false });
+      }, 100);
+    }
+  }, [searchParams, router]);
+
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-6 text-center text-foreground">
       <main className="max-w-3xl w-full space-y-8">
@@ -40,5 +59,13 @@ export default function Home() {
         Made with ❤️ in AI-Boomi, Pune
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <HomeContent />
+    </Suspense>
   );
 }
