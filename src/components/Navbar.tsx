@@ -20,7 +20,7 @@ export default function Navbar() {
             <div className="w-px h-4 bg-border"></div>
 
             <a
-                href="https://github.com/karma1505?tab=repositories"
+                href="https://github.com/karma1505/leaselense-frontend"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors font-medium text-sm group"

@@ -6,7 +6,7 @@ export default function Home() {
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-6 text-center text-foreground">
       <main className="max-w-3xl w-full space-y-8">
         <div className="space-y-4">
-          <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl">
+          <h1 className="text-4xl mt-16 font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl">
             Identify Risks in Your <span className="text-primary">Rental Lease</span>
           </h1>
           <p className="text-lg text-muted-foreground md:text-xl">
