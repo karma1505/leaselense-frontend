@@ -2,12 +2,26 @@
 
 import React, { useState } from 'react';
 import LetterModal from '@/components/LetterModal';
+import { Globe } from 'lucide-react';
+
+const LANGUAGES = [
+    { code: 'English', label: 'English' },
+    { code: 'Hindi', label: 'Hindi (हिंदी)' },
+    { code: 'Marathi', label: 'Marathi (मराठी)' },
+];
 
 export default function ResultsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [risks, setRisks] = useState<any[]>([]);
+    const [originalRisks, setOriginalRisks] = useState<any[]>([]); // Backup for English
     const [letterContent, setLetterContent] = useState("");
     const [isGenerating, setIsGenerating] = useState(false);
+    const [currentLang, setCurrentLang] = useState('English');
+    const [isTranslating, setIsTranslating] = useState(false);
+
+    // Cache mapped by language code: { 'Hindi': { data: [...], timestamp: 123456789 } }
+    const [translationCache, setTranslationCache] = useState<Record<string, { data: any[], timestamp: number }>>({});
+    const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in ms
 
     React.useEffect(() => {
         const stored = localStorage.getItem('analysisResults');
@@ -16,12 +30,63 @@ export default function ResultsPage() {
                 const data = JSON.parse(stored);
                 if (data.risks) {
                     setRisks(data.risks);
+                    setOriginalRisks(data.risks); // Init backup
                 }
             } catch (e) {
                 console.error("Failed to parse results", e);
             }
         }
     }, []);
+
+    const handleLanguageChange = async (lang: string) => {
+        if (lang === currentLang) return;
+        setCurrentLang(lang);
+
+        if (lang === 'English') {
+            setRisks(originalRisks);
+            return;
+        }
+
+        // Check Cache
+        const now = Date.now();
+        const cached = translationCache[lang];
+        if (cached && (now - cached.timestamp < CACHE_TTL)) {
+            console.log(`[Cache Hit] Using cached translation for ${lang}`);
+            setRisks(cached.data);
+            return;
+        }
+
+        setIsTranslating(true);
+        try {
+            console.log(`[Cache Miss] Fetching translation for ${lang}`);
+            const res = await fetch("http://127.0.0.1:8000/api/v1/translate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    data: { risks: originalRisks }, // Send English Data
+                    target_language: lang
+                })
+            });
+
+            if (!res.ok) throw new Error("Translation failed");
+            const translated = await res.json();
+
+            if (translated.risks) {
+                setRisks(translated.risks);
+                // Update Cache
+                setTranslationCache(prev => ({
+                    ...prev,
+                    [lang]: { data: translated.risks, timestamp: Date.now() }
+                }));
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Failed to translate results. Please try again.");
+            setCurrentLang('English'); // Revert
+        } finally {
+            setIsTranslating(false);
+        }
+    };
 
     const handleGenerateLetter = async () => {
         setIsGenerating(true);
@@ -56,9 +121,85 @@ export default function ResultsPage() {
 
     return (
         <div className="min-h-screen bg-background p-4 pt-24 md:p-8 md:pt-28">
-            <header className="max-w-4xl mx-auto mb-6 md:mb-8 flex justify-between items-center">
+            <header className="max-w-4xl mx-auto mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
                 <h1 className="text-xl md:text-2xl font-bold text-foreground">Lease Analysis Report</h1>
+
+                {/* Language Selector */}
+                <div className="flex items-center gap-2 bg-card border border-border rounded-lg px-3 py-1.5 shadow-sm">
+                    <Globe className="w-4 h-4 text-muted-foreground" />
+                    <select
+                        value={currentLang}
+                        onChange={(e) => handleLanguageChange(e.target.value)}
+                        disabled={isTranslating}
+                        className="bg-transparent text-sm font-medium outline-none cursor-pointer"
+                    >
+                        {LANGUAGES.map(l => (
+                            <option key={l.code} value={l.code}>{l.label}</option>
+                        ))}
+                    </select>
+                    {isTranslating && <span className="text-xs text-muted-foreground animate-pulse">translating...</span>}
+                </div>
             </header>
+
+            {/* Score Section - Always Visible */}
+            <div className="max-w-4xl mx-auto mb-10 flex flex-col md:flex-row items-center justify-between bg-card border border-border rounded-xl p-8 shadow-sm">
+                <div className="mb-6 md:mb-0 md:mr-8 text-center md:text-left">
+                    <h2 className="text-2xl font-bold mb-2">Lease Health Score</h2>
+                    <p className="text-muted-foreground max-w-sm">
+                        Score starts at 100. Points are deducted for high-risk (-10) and medium-risk (-5) clauses.
+                    </p>
+                </div>
+
+                <div className="relative w-32 h-32 flex items-center justify-center">
+                    {(() => {
+                        let score = 100;
+                        risks.forEach(r => {
+                            const conf = r.confidence || "";
+                            if (conf.includes('High') || conf.includes('Critical')) score -= 10;
+                            else if (conf.includes('Medium')) score -= 5;
+                            else score -= 2; // Low risk default
+                        });
+                        score = Math.max(0, score); // Min 0
+
+                        let color = "text-green-500";
+                        let ringColor = "stroke-green-500";
+                        if (score < 50) { color = "text-red-500"; ringColor = "stroke-red-500"; }
+                        else if (score < 70) { color = "text-orange-500"; ringColor = "stroke-orange-500"; }
+                        else if (score < 90) { color = "text-yellow-500"; ringColor = "stroke-yellow-500"; }
+
+                        const radius = 58;
+                        const circumference = 2 * Math.PI * radius;
+                        const offset = circumference - (score / 100) * circumference;
+
+                        return (
+                            <>
+                                <svg className="w-full h-full transform -rotate-90">
+                                    {/* Background Ring */}
+                                    <circle
+                                        cx="64" cy="64" r={radius}
+                                        stroke="currentColor" strokeWidth="12"
+                                        fill="transparent"
+                                        className="text-muted/20"
+                                    />
+                                    {/* Progress Ring */}
+                                    <circle
+                                        cx="64" cy="64" r={radius}
+                                        stroke="currentColor" strokeWidth="12"
+                                        fill="transparent"
+                                        strokeDasharray={circumference}
+                                        strokeDashoffset={offset}
+                                        strokeLinecap="round"
+                                        className={`${ringColor} transition-all duration-1000 ease-out`}
+                                    />
+                                </svg>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    <span className={`text-3xl font-bold ${color}`}>{score}</span>
+                                </div>
+                            </>
+                        );
+                    })()}
+                </div>
+            </div>
 
             <div className="max-w-4xl mx-auto space-y-6">
                 {risks.length === 0 ? (
@@ -91,9 +232,15 @@ export default function ResultsPage() {
                                 {/* Header: Title & Tag */}
                                 <div className="flex justify-between items-start">
                                     <h3 className="text-xl font-bold text-red-600 dark:text-red-400">{risk.risk_type}</h3>
-                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide text-white ${risk.confidence === 'High' ? 'bg-red-600' : 'bg-yellow-600'}`}>
-                                        {risk.confidence} Risk
-                                    </span>
+                                    <div className="flex gap-2">
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide text-white ${(risk.confidence || "").includes('High') || (risk.confidence || "").includes('Critical') ? 'bg-red-600' : 'bg-yellow-600'
+                                            }`}>
+                                            {risk.confidence} Risk
+                                        </span>
+                                        <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide text-white bg-gray-700">
+                                            {(risk.confidence || "").includes('High') || (risk.confidence || "").includes('Critical') ? '-10' : (risk.confidence || "").includes('Medium') ? '-5' : '-2'} pts
+                                        </span>
+                                    </div>
                                 </div>
 
                                 {/* Quote Box */}

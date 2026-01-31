@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import FAQ from "@/components/FAQ";
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
           </p>
         </div>
         <div className="flex gap-4 justify-center mt-8">
-          <Link href="/upload">
+          <Link href="/select-state">
             <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transition-transform transform hover:-translate-y-1 flex items-center gap-2">
               Start Audit <ArrowRight className="w-5 h-5" />
             </button>
@@ -31,6 +32,8 @@ export default function Home() {
             allowFullScreen
           ></iframe>
         </div>
+
+        <FAQ />
       </main>
 
       <footer className="absolute bottom-4 text-sm text-muted-foreground opacity-70">

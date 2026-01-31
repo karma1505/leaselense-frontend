@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Github, Home, Moon, Sun } from "lucide-react";
+import { Github, Home, Moon, Sun, CreditCard } from "lucide-react";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import * as React from "react";
@@ -15,6 +15,16 @@ export default function Navbar() {
             >
                 <Home size={18} className="group-hover:scale-110 transition-transform" />
                 <span className="hidden sm:inline">Home</span>
+            </Link>
+
+            <div className="w-px h-4 bg-border"></div>
+
+            <Link
+                href="/pricing"
+                className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors font-medium text-sm group"
+            >
+                <CreditCard size={18} className="group-hover:scale-110 transition-transform" />
+                <span className="hidden sm:inline">Pricing</span>
             </Link>
 
             <div className="w-px h-4 bg-border"></div>
