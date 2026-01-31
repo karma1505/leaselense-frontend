@@ -21,39 +21,21 @@ export default function UploadPage() {
         setIsLoading(true);
 
         try {
-            // 1. Upload File
+            // 1. Single API Call to /analyze (which handles Upload + Docling + RAG)
             const formData = new FormData();
             formData.append("file", file);
 
-            console.log("[Frontend] Uploading file:", file.name);
-            const uploadRes = await fetch("http://127.0.0.1:8000/api/v1/upload", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (!uploadRes.ok) throw new Error("Upload failed");
-            const uploadData = await uploadRes.json();
-            console.log("[Frontend] Upload success:", uploadData);
-
-            // 2. Extract Text
-            console.log("[Frontend] Extracting text...");
-            const extractRes = await fetch(`http://127.0.0.1:8000/api/v1/extract?filename=${uploadData.filename}`, {
-                method: "POST"
-            });
-
-            if (!extractRes.ok) throw new Error("Extraction failed");
-            const extractData = await extractRes.json();
-            console.log("[Frontend] Extraction success:", extractData);
-
-            // 3. Analyze Risks
-            console.log("[Frontend] Analyzing risks...");
+            console.log("[Frontend] Uploading & Analyzing file:", file.name);
             const analyzeRes = await fetch("http://127.0.0.1:8000/api/v1/analyze", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ clause_text: extractData.text })
+                body: formData, // Browser sets Content-Type to multipart/form-data
             });
 
-            if (!analyzeRes.ok) throw new Error("Analysis failed");
+            if (!analyzeRes.ok) {
+                const errData = await analyzeRes.json();
+                throw new Error(errData.detail || "Analysis failed");
+            }
+
             const analysisData = await analyzeRes.json();
             console.log("[Frontend] Analysis success:", analysisData);
 

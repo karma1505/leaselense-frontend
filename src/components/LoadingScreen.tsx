@@ -6,7 +6,7 @@ export default function LoadingScreen() {
 
     useEffect(() => {
         const timer1 = setTimeout(() => setStatus("Identifying Clauses..."), 1500);
-        const timer2 = setTimeout(() => setStatus("Comparing with Tenancy Act..."), 3000);
+        const timer2 = setTimeout(() => setStatus("Comparing with the MRCA, TPA & Other Law Sources..."), 3000);
         const timer3 = setTimeout(() => setStatus("Finding Risks..."), 4500);
         return () => {
             clearTimeout(timer1);

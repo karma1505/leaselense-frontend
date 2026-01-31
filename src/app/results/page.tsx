@@ -62,29 +62,63 @@ export default function ResultsPage() {
 
             <div className="max-w-4xl mx-auto space-y-6">
                 {risks.length === 0 ? (
-                    <div className="text-center py-10 text-muted-foreground">
-                        No significant risks found or no data available.
+                    <div className="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-xl p-8 md:p-12 text-center flex flex-col items-center animate-in fade-in zoom-in duration-500">
+                        <div className="bg-green-100 dark:bg-green-800 p-4 rounded-full mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 dark:text-green-400">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <h2 className="text-2xl font-bold text-green-700 dark:text-green-400 mb-2">Clean Lease!</h2>
+                        <p className="text-muted-foreground max-w-md">
+                            We analyzed your document against the Model Tenancy Act & MRCA.
+                            <br />No critical violations or "Silent Killers" were found.
+                        </p>
                     </div>
                 ) : (
                     risks.map((risk, index) => (
-                        <div key={index} className="bg-card rounded-lg shadow-sm border border-border p-6 flex flex-col md:flex-row gap-6">
-                            <div className="flex-shrink-0">
-                                <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide text-white
-                     ${risk.confidence === 'High' ? 'bg-red-600 dark:bg-red-900/50 dark:text-red-200' : 'bg-yellow-600 dark:bg-yellow-900/50 dark:text-yellow-200'}`}>
-                                    {risk.confidence} Risk
-                                </span>
+                        <div key={index} className="flex gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                            {/* Number Badge */}
+                            <div className="flex-shrink-0 pt-1">
+                                <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center rounded-full bg-muted border border-border font-bold text-muted-foreground shadow-sm">
+                                    {index + 1}
+                                </div>
                             </div>
-                            <div className="flex-grow">
-                                <h3 className="text-lg font-semibold text-foreground mb-1">{risk.risk_type}</h3>
-                                <p className="text-muted-foreground mb-3">{risk.explanation}</p>
+
+                            {/* Risk Card */}
+                            <div className="flex-grow bg-card rounded-lg shadow-md border border-border p-6 flex flex-col gap-4">
+
+                                {/* Header: Title & Tag */}
+                                <div className="flex justify-between items-start">
+                                    <h3 className="text-xl font-bold text-red-600 dark:text-red-400">{risk.risk_type}</h3>
+                                    <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide text-white ${risk.confidence === 'High' ? 'bg-red-600' : 'bg-yellow-600'}`}>
+                                        {risk.confidence} Risk
+                                    </span>
+                                </div>
+
+                                {/* Quote Box */}
                                 {risk.clause_snippet && (
-                                    <div className="bg-muted px-4 py-2 rounded text-sm text-foreground font-mono text-xs mb-2">
-                                        "{risk.clause_snippet.substring(0, 150)}..."
+                                    <div className="bg-muted p-4 rounded-md border-l-4 border-primary">
+                                        <p className="text-sm italic text-muted-foreground font-mono">
+                                            "{risk.clause_snippet.substring(0, 300)}..."
+                                        </p>
                                     </div>
                                 )}
-                                <div className="text-xs text-blue-500 font-medium">
-                                    Based on Model Tenancy Act
+
+                                {/* Actual Violation */}
+                                <div>
+                                    <h4 className="text-sm font-semibold text-foreground uppercase tracking-wider mb-1">Violation</h4>
+                                    <p className="text-foreground">{risk.explanation}</p>
                                 </div>
+
+                                {/* Citation */}
+                                {risk.citation && (
+                                    <div className="pt-2 border-t border-border mt-2">
+                                        <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">
+                                            Reference: {risk.citation}
+                                        </p>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))
