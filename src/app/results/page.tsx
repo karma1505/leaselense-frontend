@@ -59,7 +59,8 @@ export default function ResultsPage() {
         setIsTranslating(true);
         try {
             console.log(`[Cache Miss] Fetching translation for ${lang}`);
-            const res = await fetch("http://127.0.0.1:8000/api/v1/translate", {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
+            const res = await fetch(`${apiUrl}/translate`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -101,7 +102,8 @@ export default function ResultsPage() {
                 return;
             }
 
-            const res = await fetch("http://127.0.0.1:8000/api/v1/generate-letter", {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1";
+            const res = await fetch(`${apiUrl}/generate-letter`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ risk_details: targetRisk })
