@@ -92,11 +92,8 @@ export default function ResultsPage() {
     const handleGenerateLetter = async () => {
         setIsGenerating(true);
         try {
-            // Use the first risk or create a summary of all risks
-            // For now, let's take the first Critical/High risk, or just the first one.
-            const targetRisk = risks.find(r => r.confidence === 'High') || risks[0];
-
-            if (!targetRisk) {
+            // Send ALL risks to the backend for a comprehensive email
+            if (risks.length === 0) {
                 alert("No risks found to generate a letter for.");
                 setIsGenerating(false);
                 return;
@@ -106,7 +103,7 @@ export default function ResultsPage() {
             const res = await fetch(`${apiUrl}/generate-letter`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ risk_details: targetRisk })
+                body: JSON.stringify({ risks: risks }) // Changed key to 'risks' matching backend model
             });
 
             if (!res.ok) throw new Error("Failed to generate letter");
