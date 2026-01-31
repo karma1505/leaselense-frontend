@@ -1,0 +1,41 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 md:p-6 text-center text-foreground">
+      <main className="max-w-3xl w-full space-y-8">
+        <div className="space-y-4">
+          <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl md:text-6xl">
+            Identify Risks in Your <span className="text-primary">Rental Lease</span>
+          </h1>
+          <p className="text-lg text-muted-foreground md:text-xl">
+            Upload your contract and get an instant legal review based on the Model Tenancy Act.
+          </p>
+        </div>
+        <div className="flex gap-4 justify-center mt-8">
+          <Link href="/upload">
+            <button className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transition-transform transform hover:-translate-y-1 flex items-center gap-2">
+              Start Audit <ArrowRight className="w-5 h-5" />
+            </button>
+          </Link>
+        </div>
+
+        <div className="mt-12 w-full max-w-3xl aspect-video rounded-xl overflow-hidden shadow-2xl mx-auto">
+          <iframe
+            className="w-full h-full"
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1"
+            title="Product Demo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      </main>
+
+      <footer className="absolute bottom-4 text-sm text-muted-foreground opacity-70">
+        Made with ❤️ in AI-Boomi, Pune
+      </footer>
+    </div>
+  );
+}

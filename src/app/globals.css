@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+:root {
+  /* Solarized-inspired Light Theme (Soft/Off-White) */
+  --background: #FAF9F6;
+  /* Off-white / Eggshell */
+  --foreground: #1F2937;
+  /* Charcoal Grey */
+
+  --card: #FFFFFF;
+  --card-foreground: #1F2937;
+
+  --primary: #2563EB;
+  --primary-foreground: #FFFFFF;
+
+  --muted: #F3F4F6;
+  --muted-foreground: #6B7280;
+
+  --border: #E5E7EB;
+
+  --font-fira-code: 'Fira Code', monospace;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --font-fira-code: var(--font-fira-code);
+}
+
+.dark {
+  /* Modern Dark Theme (Charcoal/Dark Grey) */
+  --background: #1A1A1A;
+  /* Deep Charcoal, requested by user */
+  --foreground: #E5E7EB;
+  /* Soft White */
+
+  --card: #1E1E1E;
+  /* Lighter Charcoal for cards */
+  --card-foreground: #E5E7EB;
+
+  --primary: #3B82F6;
+  --primary-foreground: #FFFFFF;
+
+  --muted: #27272A;
+  --muted-foreground: #9CA3AF;
+
+  --border: #2E2E2E;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-fira-code), monospace;
+}
