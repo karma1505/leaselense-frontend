@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import LetterModal from '@/components/LetterModal';
-import { Globe } from 'lucide-react';
+import { Globe, Mail, MessageCircle } from 'lucide-react';
 
 const LANGUAGES = [
     { code: 'English', label: 'English' },
@@ -18,6 +18,7 @@ export default function ResultsPage() {
     const [isGenerating, setIsGenerating] = useState(false);
     const [currentLang, setCurrentLang] = useState('English');
     const [isTranslating, setIsTranslating] = useState(false);
+    const [negotiationFormat, setNegotiationFormat] = useState<'email' | 'whatsapp'>('email');
 
     // Cache mapped by language code: { 'Hindi': { data: [...], timestamp: 123456789 } }
     const [translationCache, setTranslationCache] = useState<Record<string, { data: any[], timestamp: number }>>({});
@@ -103,7 +104,10 @@ export default function ResultsPage() {
             const res = await fetch(`${apiUrl}/generate-letter`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ risks: risks }) // Changed key to 'risks' matching backend model
+                body: JSON.stringify({
+                    risks: risks,
+                    format: negotiationFormat
+                })
             });
 
             if (!res.ok) throw new Error("Failed to generate letter");
@@ -271,14 +275,39 @@ export default function ResultsPage() {
                 )}
             </div>
 
-            <div className="max-w-4xl mx-auto mt-10 text-center">
-                <p className="text-muted-foreground mb-4">Ready to negotiate?</p>
+            <div className="max-w-4xl mx-auto mt-10 flex flex-col items-center gap-4">
+                <p className="text-muted-foreground">Ready to negotiate?</p>
+
+                {/* Format Toggle */}
+                <div className="flex bg-muted rounded-full p-1 border border-border">
+                    <button
+                        onClick={() => setNegotiationFormat('email')}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${negotiationFormat === 'email'
+                            ? 'bg-background text-foreground shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground'
+                            }`}
+                    >
+                        <Mail className="w-4 h-4 mr-2 inline-block" />
+                        Email (Formal)
+                    </button>
+                    <button
+                        onClick={() => setNegotiationFormat('whatsapp')}
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${negotiationFormat === 'whatsapp'
+                            ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 shadow-sm'
+                            : 'text-muted-foreground hover:text-foreground'
+                            }`}
+                    >
+                        <MessageCircle className="w-4 h-4 mr-2 inline-block" />
+                        WhatsApp (Short)
+                    </button>
+                </div>
+
                 <button
                     onClick={handleGenerateLetter}
                     disabled={risks.length === 0 || isGenerating}
                     className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform transition hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    {isGenerating ? "Drafting..." : "Generate Negotiation Email"}
+                    {isGenerating ? "Drafting..." : `Generate ${negotiationFormat === 'email' ? 'Negotiation Email' : 'WhatsApp Message'}`}
                 </button>
             </div>
 
