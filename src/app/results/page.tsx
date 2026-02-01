@@ -11,6 +11,24 @@ const LANGUAGES = [
     { code: 'Marathi', label: 'Marathi (मराठी)' },
 ];
 
+const CLEAN_LEASE_MESSAGES: Record<string, { title: string; body: string; sub: string }> = {
+    'English': {
+        title: "Clean Lease!",
+        body: "We analyzed your document against the Model Tenancy Act & MRCA.",
+        sub: "No critical violations or \"Silent Killers\" were found."
+    },
+    'Hindi': {
+        title: "सुरक्षित लीज!",
+        body: "हमने मॉडल टेनेंसी एक्ट और MRCA के तहत आपके दस्तावेज़ का विश्लेषण किया।",
+        sub: "कोई गंभीर उल्लंघन या 'छिपे हुए खतरे' नहीं मिले।"
+    },
+    'Marathi': {
+        title: "सुरक्षित भाडे करार!",
+        body: "आम्ही मॉडेल टेनन्सी ॲक्ट आणि MRCA नुसार तुमच्या कराराचे विश्लेषण केले आहे.",
+        sub: "यात कोणतेही गंभीर उल्लंघन किंवा 'छुपे धोके' आढळले नाहीत."
+    }
+};
+
 export default function ResultsPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [risks, setRisks] = useState<any[]>([]);
@@ -46,6 +64,12 @@ export default function ResultsPage() {
 
         if (lang === 'English') {
             setRisks(originalRisks);
+            return;
+        }
+
+        // Optimization: If it's a clean lease (no risks), no need to call API. 
+        // The UI will update instantly using the hardcoded CLEAN_LEASE_MESSAGES map.
+        if (originalRisks.length === 0) {
             return;
         }
 
@@ -223,10 +247,13 @@ export default function ResultsPage() {
                                 <polyline points="22 4 12 14.01 9 11.01"></polyline>
                             </svg>
                         </div>
-                        <h2 className="text-2xl font-bold text-green-700 dark:text-green-400 mb-2">Clean Lease!</h2>
+                        <h2 className="text-2xl font-bold text-green-700 dark:text-green-400 mb-2">
+                            {CLEAN_LEASE_MESSAGES[currentLang]?.title || CLEAN_LEASE_MESSAGES['English'].title}
+                        </h2>
                         <p className="text-muted-foreground max-w-md">
-                            We analyzed your document against the Model Tenancy Act & MRCA.
-                            <br />No critical violations or "Silent Killers" were found.
+                            {CLEAN_LEASE_MESSAGES[currentLang]?.body || CLEAN_LEASE_MESSAGES['English'].body}
+                            <br />
+                            {CLEAN_LEASE_MESSAGES[currentLang]?.sub || CLEAN_LEASE_MESSAGES['English'].sub}
                         </p>
                     </div>
                 ) : (
