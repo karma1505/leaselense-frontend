@@ -43,9 +43,9 @@ export default function PricingPage() {
             popular: true
         },
         {
-            name: "Pro Subscription",
-            price: "₹1500",
-            period: "/ month",
+            name: "Enterprise Plan",
+            price: "Contact Sales",
+            period: "",
             description: "For heavy users and legal professionals.",
             features: [
                 "Unlimited Uploads",
@@ -56,7 +56,7 @@ export default function PricingPage() {
                 "Dedicated Account Manager"
             ],
             notIncluded: [],
-            cta: "Subscribe Now",
+            cta: "Contact Us",
             popular: false
         }
     ];
@@ -76,7 +76,7 @@ export default function PricingPage() {
                 {plans.map((plan, index) => (
                     <div
                         key={index}
-                        className={`relative bg-card rounded-2xl border ${plan.popular ? 'border-primary shadow-2xl scale-105 z-10' : 'border-border shadow-lg'} p-8 flex flex-col`}
+                        className={`relative bg-card rounded-2xl border transition-transform duration-300 p-8 flex flex-col ${plan.popular ? 'border-primary shadow-2xl scale-105 z-10 hover:scale-110' : 'border-border shadow-lg hover:scale-105'}`}
                     >
                         {plan.popular && (
                             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-primary text-primary-foreground px-4 py-1 rounded-full text-sm font-bold uppercase tracking-wide">
@@ -108,9 +108,9 @@ export default function PricingPage() {
                             ))}
                         </ul>
 
-                        <button className={`w-full py-3 rounded-lg font-bold transition-all ${plan.popular
-                            ? 'bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg hover:shadow-xl'
-                            : 'bg-secondary text-secondary-foreground hover:bg-secondary/80'
+                        <button className={`w-full py-3 rounded-lg font-bold transition-all bg-primary text-primary-foreground hover:bg-primary/90 ${plan.popular
+                            ? 'shadow-lg hover:shadow-xl'
+                            : ''
                             }`}>
                             {plan.cta}
                         </button>

@@ -26,7 +26,7 @@ export default function Footer() {
                 <div className="col-span-1 md:col-span-1 space-y-4">
                     <Link href="/" className="flex items-center gap-1 font-bold text-xl tracking-tight">
                         <span className="text-blue-600 dark:text-blue-500">LeaseLens</span>
-                        <span className="text-green-600 dark:text-gray-800">AI</span>
+                        <span className="text-foreground">AI</span>
                     </Link>
                     <p className="text-muted-foreground text-sm leading-relaxed">
                         AI-powered protection for tenants. We analyze leases, spot red flags, and help you negotiate better terms.
@@ -61,16 +61,20 @@ export default function Footer() {
                     <ul className="space-y-2 text-sm text-muted-foreground">
                         <li><Link href="/privacy" className="hover:text-primary transition-colors">Privacy Policy</Link></li>
                         <li><Link href="/terms" className="hover:text-primary transition-colors">Terms of Service</Link></li>
-                        <li><Link href="/disclaimer" className="hover:text-primary transition-colors">Disclaimer</Link></li>
                     </ul>
                 </div>
             </div>
 
             {/* Bottom Bar */}
             <div className="max-w-7xl mx-auto pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
-                <p className="text-sm text-muted-foreground text-center md:text-left">
-                    © {new Date().getFullYear()} LeaseLensAI. All rights reserved.
-                </p>
+                <div className="text-center md:text-left">
+                    <p className="text-sm text-muted-foreground">
+                        © {new Date().getFullYear()} LeaseLensAI. All rights reserved.
+                    </p>
+                    <p className="text-xs text-muted-foreground/80 mt-1">
+                        AI-generated analysis. Not a substitute for professional legal counsel.
+                    </p>
+                </div>
 
                 <div className="flex items-center gap-6">
                     <Link href="https://twitter.com" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -80,7 +84,7 @@ export default function Footer() {
                         </svg>
                         <span className="sr-only">X (Twitter)</span>
                     </Link>
-                    <Link href="https://github.com" target="_blank" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Link href="https://github.com/karma1505/leaselense-frontend" target="_blank" className="text-muted-foreground hover:text-primary transition-colors">
                         <Github className="w-5 h-5" />
                         <span className="sr-only">GitHub</span>
                     </Link>
@@ -88,7 +92,7 @@ export default function Footer() {
                         <Linkedin className="w-5 h-5" />
                         <span className="sr-only">LinkedIn</span>
                     </Link>
-                    <Link href="mailto:contact@leaselens.ai" className="text-muted-foreground hover:text-primary transition-colors">
+                    <Link href="mailto:support@leaselens.ai" className="text-muted-foreground hover:text-primary transition-colors">
                         <Mail className="w-5 h-5" />
                         <span className="sr-only">Email</span>
                     </Link>

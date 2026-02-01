@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import LetterModal from '@/components/LetterModal';
+import ViralShareButton from '@/components/ViralShareButton';
 import { Globe, Mail, MessageCircle } from 'lucide-react';
 
 const LANGUAGES = [
@@ -122,6 +123,19 @@ export default function ResultsPage() {
         }
     };
 
+    // Calculate Score relative to risks
+    const calculatedScore = React.useMemo(() => {
+        let score = 100;
+        risks.forEach(r => {
+            const conf = r.confidence || "";
+            if (conf.includes('High') || conf.includes('Critical')) score -= 10;
+            else if (conf.includes('Medium')) score -= 5;
+            else score -= 2; // Low risk default
+        });
+        return Math.max(0, score);
+    }, [risks]);
+
+
     return (
         <div className="min-h-screen bg-background p-4 pt-24 md:p-8 md:pt-28">
             <header className="max-w-4xl mx-auto mb-6 md:mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -146,33 +160,29 @@ export default function ResultsPage() {
 
             {/* Score Section - Always Visible */}
             <div className="max-w-4xl mx-auto mb-10 flex flex-col md:flex-row items-center justify-between bg-card border border-border rounded-xl p-8 shadow-sm">
-                <div className="mb-6 md:mb-0 md:mr-8 text-center md:text-left">
+                <div className="mb-6 md:mb-0 md:mr-8 text-center md:text-left flex-1">
                     <h2 className="text-2xl font-bold mb-2">Lease Health Score</h2>
-                    <p className="text-muted-foreground max-w-sm">
+                    <p className="text-muted-foreground max-w-sm mb-6">
                         Score starts at 100. Points are deducted for high-risk (-10) and medium-risk (-5) clauses.
                     </p>
+
+                    {/* Seamless Share Integration */}
+                    <div className="flex justify-center md:justify-start">
+                        <ViralShareButton riskCount={risks.length} score={calculatedScore} />
+                    </div>
                 </div>
 
-                <div className="relative w-32 h-32 flex items-center justify-center">
+                <div className="relative w-32 h-32 flex items-center justify-center flex-shrink-0">
                     {(() => {
-                        let score = 100;
-                        risks.forEach(r => {
-                            const conf = r.confidence || "";
-                            if (conf.includes('High') || conf.includes('Critical')) score -= 10;
-                            else if (conf.includes('Medium')) score -= 5;
-                            else score -= 2; // Low risk default
-                        });
-                        score = Math.max(0, score); // Min 0
-
                         let color = "text-green-500";
                         let ringColor = "stroke-green-500";
-                        if (score < 50) { color = "text-red-500"; ringColor = "stroke-red-500"; }
-                        else if (score < 70) { color = "text-orange-500"; ringColor = "stroke-orange-500"; }
-                        else if (score < 90) { color = "text-yellow-500"; ringColor = "stroke-yellow-500"; }
+                        if (calculatedScore < 50) { color = "text-red-500"; ringColor = "stroke-red-500"; }
+                        else if (calculatedScore < 70) { color = "text-orange-500"; ringColor = "stroke-orange-500"; }
+                        else if (calculatedScore < 90) { color = "text-yellow-500"; ringColor = "stroke-yellow-500"; }
 
                         const radius = 58;
                         const circumference = 2 * Math.PI * radius;
-                        const offset = circumference - (score / 100) * circumference;
+                        const offset = circumference - (calculatedScore / 100) * circumference;
 
                         return (
                             <>
@@ -196,7 +206,7 @@ export default function ResultsPage() {
                                     />
                                 </svg>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <span className={`text-3xl font-bold ${color}`}>{score}</span>
+                                    <span className={`text-3xl font-bold ${color}`}>{calculatedScore}</span>
                                 </div>
                             </>
                         );
@@ -293,7 +303,7 @@ export default function ResultsPage() {
                     <button
                         onClick={() => setNegotiationFormat('whatsapp')}
                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${negotiationFormat === 'whatsapp'
-                            ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 shadow-sm'
+                            ? 'bg-green-500 text-white shadow-md hover:bg-green-600 dark:bg-green-600 dark:text-white'
                             : 'text-muted-foreground hover:text-foreground'
                             }`}
                     >

@@ -1,51 +1,52 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
-import { ChevronLeft, Scale } from 'lucide-react';
+import { ChevronLeft, Printer } from 'lucide-react';
 
 export default function TermsPage() {
     return (
-        <div className="min-h-screen bg-background text-foreground py-16 px-4 md:px-8">
-            <div className="max-w-3xl mx-auto">
+        <div className="min-h-screen bg-muted/30 py-12 px-4 md:px-8 font-sans">
+            <div className="max-w-4xl mx-auto">
 
-                {/* Back Link */}
-                <Link href="/" className="inline-flex items-center text-sm text-muted-foreground hover:text-primary mb-8 transition-colors">
-                    <ChevronLeft className="w-4 h-4 mr-1" /> Back to Home
-                </Link>
-
-                {/* Header */}
-                <div className="border-b border-border pb-8 mb-8">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-3 bg-primary/10 rounded-lg">
-                            <Scale className="w-8 h-8 text-primary" />
-                        </div>
-                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight">Terms of Service</h1>
-                    </div>
-                    <p className="text-muted-foreground">
-                        Last Updated: <span className="font-medium text-foreground">February 1, 2026</span>
-                    </p>
+                {/* Navigation Bar (Outside Document) */}
+                <div className="flex justify-between items-center mb-6 px-2">
+                    <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                        <ChevronLeft className="w-4 h-4 mr-1" /> Back to Home
+                    </Link>
+                    <button
+                        onClick={() => window.print()}
+                        className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                        <Printer className="w-4 h-4 mr-2" /> Print
+                    </button>
                 </div>
 
-                {/* Content */}
-                <article className="prose prose-slate dark:prose-invert max-w-none space-y-8">
+                {/* Paper Document Container */}
+                <div className="bg-background shadow-sm border border-border p-8 md:p-16 md:shadow-xl rounded-sm text-foreground">
 
-                    <section>
-                        <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
-                            <span className="bg-muted w-8 h-8 flex items-center justify-center rounded-full text-sm">1</span>
-                            Introduction
-                        </h2>
-                        <p className="text-muted-foreground leading-relaxed">
-                            Welcome to LeaseLense ("we," "our," or "us"). By accessing or using our website, services, and AI-powered lease analysis tools, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.
+                    {/* Document Header */}
+                    <div className="border-b-2 border-foreground/10 pb-6 mb-10 text-center">
+                        <h1 className="text-3xl md:text-4xl font-serif font-bold tracking-tight text-foreground mb-4">Terms of Service</h1>
+                        <p className="text-sm font-serif text-muted-foreground uppercase tracking-widest">
+                            Last Updated: February 1, 2026
                         </p>
-                    </section>
+                    </div>
 
-                    <section className="bg-orange-50 dark:bg-orange-950/20 p-6 rounded-xl border border-orange-200 dark:border-orange-900/50">
-                        <h2 className="text-xl font-bold mb-3 flex items-center gap-2 text-orange-800 dark:text-orange-400">
-                            <span className="bg-orange-200 dark:bg-orange-900 w-8 h-8 flex items-center justify-center rounded-full text-sm">2</span>
-                            Not Legal Advice (Critical Disclaimer)
-                        </h2>
-                        <div className="text-orange-900/80 dark:text-orange-200/80 leading-relaxed space-y-4">
-                            <p><strong>LeaseLense is an AI-powered analysis tool, not a law firm.</strong></p>
+                    {/* Document Body - Serif Font for Legal Feel */}
+                    <article className="prose prose-slate dark:prose-invert max-w-none font-serif text-justify leading-relaxed text-foreground/90">
+
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold mb-2 uppercase tracking-wide text-foreground">1. Introduction</h2>
                             <p>
+                                Welcome to LeaseLense ("we," "our," or "us"). By accessing or using our website, services, and AI-powered lease analysis tools, you agree to be bound by these Terms of Service. If you do not agree, please do not use our services.
+                            </p>
+                        </div>
+
+                        <div className="mb-8 border-l-4 border-foreground/20 pl-6 py-2">
+                            <h2 className="text-xl font-bold mb-2 uppercase tracking-wide text-foreground">2. Not Legal Advice (Critical Disclaimer)</h2>
+                            <p className="mb-4"><strong>LeaseLense is an AI-powered analysis tool, not a law firm.</strong></p>
+                            <p className="mb-4">
                                 The content, scores, and negotiation drafts generated by our platform are for informational purposes only.
                                 Our analysis is based on the Maharashtra Rent Control Act, 1999 and other general legal principles, but it does not constitute binding legal advice, representation, or counsel.
                             </p>
@@ -53,80 +54,63 @@ export default function TermsPage() {
                                 You should always consult with a qualified attorney before signing any legal document. We are not responsible for any financial loss, eviction, or legal disputes resulting from your use of this tool.
                             </p>
                         </div>
-                    </section>
 
-                    <section>
-                        <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
-                            <span className="bg-muted w-8 h-8 flex items-center justify-center rounded-full text-sm">3</span>
-                            Description of Services
-                        </h2>
-                        <p className="text-muted-foreground leading-relaxed mb-4">LeaseLense provides:</p>
-                        <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                            <li>Optical Character Recognition (OCR) of rental agreements.</li>
-                            <li>AI-driven risk analysis and scoring.</li>
-                            <li>Vernacular translation (Marathi/Hindi) of risk flags.</li>
-                            <li>Automated drafting of negotiation messages (WhatsApp/Email).</li>
-                        </ul>
-                        <p className="text-muted-foreground leading-relaxed mt-4">
-                            We reserve the right to modify, suspend, or discontinue any part of the service (including the "Free Tier" or "Enterprise" features) at any time.
-                        </p>
-                    </section>
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold mb-2 uppercase tracking-wide text-foreground">3. Description of Services</h2>
+                            <p className="mb-2">LeaseLense provides:</p>
+                            <ul className="list-disc pl-6 mb-4 space-y-1">
+                                <li>Optical Character Recognition (OCR) of rental agreements.</li>
+                                <li>AI-driven risk analysis and scoring.</li>
+                                <li>Vernacular translation (Marathi/Hindi) of risk flags.</li>
+                                <li>Automated drafting of negotiation messages (WhatsApp/Email).</li>
+                            </ul>
+                            <p>
+                                We reserve the right to modify, suspend, or discontinue any part of the service (including the "Free Tier" or "Enterprise" features) at any time.
+                            </p>
+                        </div>
 
-                    <section>
-                        <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
-                            <span className="bg-muted w-8 h-8 flex items-center justify-center rounded-full text-sm">4</span>
-                            AI Limitations
-                        </h2>
-                        <p className="text-muted-foreground leading-relaxed mb-4">
-                            You acknowledge that our services utilize Artificial Intelligence (LLMs and Vector Databases). You understand that:
-                        </p>
-                        <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                            <li><strong>AI can make mistakes (Hallucinations):</strong> The system may occasionally misinterpret a clause or miss a risk flag.</li>
-                            <li><strong>Translation Accuracy:</strong> Translations into Marathi/Hindi are automated and may not capture precise legal nuance.</li>
-                            <li><strong>Scoring:</strong> The "Safety Score" (0-100) is a heuristic estimate, not a legal guarantee of safety.</li>
-                        </ul>
-                    </section>
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold mb-2 uppercase tracking-wide text-foreground">4. AI Limitations</h2>
+                            <p className="mb-2">
+                                You acknowledge that our services utilize Artificial Intelligence (LLMs and Vector Databases). You understand that:
+                            </p>
+                            <ul className="list-disc pl-6 space-y-1">
+                                <li><strong>AI can make mistakes (Hallucinations):</strong> The system may occasionally misinterpret a clause or miss a risk flag.</li>
+                                <li><strong>Translation Accuracy:</strong> Translations into Marathi/Hindi are automated and may not capture precise legal nuance.</li>
+                                <li><strong>Scoring:</strong> The "Safety Score" (0-100) is a heuristic estimate, not a legal guarantee of safety.</li>
+                            </ul>
+                        </div>
 
-                    <section>
-                        <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
-                            <span className="bg-muted w-8 h-8 flex items-center justify-center rounded-full text-sm">5</span>
-                            User Conduct
-                        </h2>
-                        <p className="text-muted-foreground leading-relaxed mb-2">You agree not to:</p>
-                        <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                            <li>Upload documents containing illegal, harmful, or malicious content.</li>
-                            <li>Attempt to reverse-engineer our API or scrape our data.</li>
-                            <li>Use the generated negotiation drafts to harass or threaten landlords.</li>
-                        </ul>
-                    </section>
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold mb-2 uppercase tracking-wide text-foreground">5. User Conduct</h2>
+                            <p className="mb-2">You agree not to:</p>
+                            <ul className="list-disc pl-6 space-y-1">
+                                <li>Upload documents containing illegal, harmful, or malicious content.</li>
+                                <li>Attempt to reverse-engineer our API or scrape our data.</li>
+                                <li>Use the generated negotiation drafts to harass or threaten landlords.</li>
+                            </ul>
+                        </div>
 
-                    <section>
-                        <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
-                            <span className="bg-muted w-8 h-8 flex items-center justify-center rounded-full text-sm">6</span>
-                            Limitation of Liability
-                        </h2>
-                        <p className="text-muted-foreground leading-relaxed">
-                            To the fullest extent permitted by law, <strong>Team Nimbus</strong> and LeaseLense shall not be liable for any indirect, incidental, special, or consequential damages arising out of your use of the service. Our services are provided on an "AS IS" and "AS AVAILABLE" basis.
-                        </p>
-                    </section>
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold mb-2 uppercase tracking-wide text-foreground">6. Limitation of Liability</h2>
+                            <p>
+                                To the fullest extent permitted by law, <strong>Team Nimbus</strong> and LeaseLense shall not be liable for any indirect, incidental, special, or consequential damages arising out of your use of the service. Our services are provided on an "AS IS" and "AS AVAILABLE" basis.
+                            </p>
+                        </div>
 
-                    <section>
-                        <h2 className="text-xl font-bold mb-3 flex items-center gap-2">
-                            <span className="bg-muted w-8 h-8 flex items-center justify-center rounded-full text-sm">7</span>
-                            Governing Law
-                        </h2>
-                        <p className="text-muted-foreground leading-relaxed">
-                            These terms shall be governed by and construed in accordance with the laws of India, specifically under the jurisdiction of the courts in <strong>Pune, Maharashtra</strong>.
-                        </p>
-                    </section>
+                        <div className="mb-8">
+                            <h2 className="text-xl font-bold mb-2 uppercase tracking-wide text-foreground">7. Governing Law</h2>
+                            <p>
+                                These terms shall be governed by and construed in accordance with the laws of India, specifically under the jurisdiction of the courts in <strong>Pune, Maharashtra</strong>.
+                            </p>
+                        </div>
 
-                </article>
+                        {/* Document Footer / End of Page */}
+                        <div className="mt-16 pt-8 border-t border-foreground/10 text-center font-sans text-xs text-muted-foreground">
+                            <p>LeaseLensAI &bull; Team Nimbus &bull; Pune, India</p>
+                        </div>
 
-                {/* Footer Note */}
-                <div className="mt-16 pt-8 border-t border-border text-center">
-                    <p className="text-sm text-muted-foreground">
-                        If you have any questions about these Terms, please contact us at <a href="mailto:support@leaselense.com" className="text-primary hover:underline">support@leaselense.com</a>.
-                    </p>
+                    </article>
                 </div>
             </div>
         </div>
