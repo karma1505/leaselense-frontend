@@ -41,16 +41,16 @@ function HomeContent() {
           </Link>
         </div>
 
-        {/* <div className="mt-12 w-full max-w-3xl aspect-video rounded-xl overflow-hidden shadow-2xl mx-auto">
+        <div className="mt-12 w-full max-w-3xl aspect-video rounded-xl overflow-hidden shadow-2xl mx-auto">
           <iframe
             className="w-full h-full"
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1"
+            src="https://www.youtube.com/embed/RtlmZyvDw4U?autoplay=1&mute=1"
             title="Product Demo"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
-        </div> */}
+        </div>
 
         <FAQ />
       </main>
