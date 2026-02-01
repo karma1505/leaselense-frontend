@@ -172,10 +172,12 @@ export default function ResultsPage() {
                         value={currentLang}
                         onChange={(e) => handleLanguageChange(e.target.value)}
                         disabled={isTranslating}
-                        className="bg-transparent text-sm font-medium outline-none cursor-pointer"
+                        className="bg-transparent text-foreground text-sm font-medium outline-none cursor-pointer"
                     >
                         {LANGUAGES.map(l => (
-                            <option key={l.code} value={l.code}>{l.label}</option>
+                            <option key={l.code} value={l.code} className="bg-card text-foreground">
+                                {l.label}
+                            </option>
                         ))}
                     </select>
                     {isTranslating && <span className="text-xs text-muted-foreground animate-pulse">translating...</span>}
